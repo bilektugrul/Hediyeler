@@ -1,9 +1,12 @@
 ayarlar: # Buradaki her şeyi dilediğiniz gibi değiştirebilirsiniz.
     prefix: '&2[&3Hediyeler&2]'
     # ^ Mesajların başında gözükecek olan ön ek.
-    gui-adi: '&9Hediyeler'
-    # ^ /hediyeler komutu girilince açılacak menünün ismi.
-    ek-gui-slotlari: # /hediyeler komutu girilince açılacak menüde hediyelerin ikonları dışında olmasını istediğiniz eşyaları buraya yazabilirsiniz.
+    gui:
+      isim: '&9Hediyeler'
+      # ^ /hediyeler komutu girilince açılacak menünün ismi.
+      buyukluk: 5
+      # ^ /hediyeler komutu girilince açılacak menünün büyüklüğü.
+      ek-slotlar: # /hediyeler komutu girilince açılacak menüde hediyelerin ikonları dışında olmasını istediğiniz eşyaları buraya yazabilirsiniz.
         '1': # Buraya istediğinizi yazın.
             esya: wool 
             # ^ Gözükecek eşya.
