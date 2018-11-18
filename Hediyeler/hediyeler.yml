@@ -8,6 +8,8 @@ hediyeler:
     # ^ Dakika cinsinden süre.
     aldin-mesaji: '%prefix% &f%hediye% &6adlı hediyeyi aldın.'
     # ^ Oyuncu hediyeyi alınca atılacak mesaj. %prefix% ile belirlediğiniz prefixi, %oyuncu% ile oyuncunun adını ve %hediye% ile hediye adını alabilirsiniz.
+    alabilirsin-mesaji: '%prefix% &f%hediye% &6adlı hediyeyi artık alabilirsin.'
+    # ^ Oyuncu hediyeyi yeniden alabileceği zaman alacağı mesaj. %prefix% ile belirlediğiniz prefixi, %oyuncu% ile oyuncunun adını ve %hediye% ile hediye adını alabilirsiniz.
     yetkin-yok-mesaji: '%prefix% &6Maalesef &f%hediye% &6adlı hediyeyi almaya yetkin yetmiyor.'
     # ^ Oyuncunun hediyeyi alacak yetkisi yoksa atılacak mesaj. %prefix% ile belirlediğiniz prefixi, %oyuncu% ile oyuncunun adını ve %hediye% ile hediye adını alabilirsiniz.
     gui: #Hediyenin GUI'de gözükecek eşyasının ayarları.
