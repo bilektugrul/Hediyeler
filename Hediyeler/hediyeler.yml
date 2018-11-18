@@ -1,0 +1,57 @@
+hediyeler:
+  hediye-1:
+    hediye-ismi: 'Çeyrek Hediye'
+    # ^ Hediyenin ismi. Renk kodu kullanmamanız önerilir, bazı mesajlarda bu isim gözükür.
+    yetki: 'hediyeler.hediye-1'
+    # ^ Oyuncuların hediyeyi alabilmesi için gereken yetki.
+    sure: 1
+    # ^ Dakika cinsinden süre.
+    aldin-mesaji: '%prefix% &f%hediye% &6adlı hediyeyi aldın.'
+    # ^ Oyuncu hediyeyi alınca atılacak mesaj. %prefix% ile belirlediğiniz prefixi, %oyuncu% ile oyuncunun adını ve %hediye% ile hediye adını alabilirsiniz.
+    yetkin-yok-mesaji: '%prefix% &6Maalesef &f%hediye% &6adlı hediyeyi almaya yetkin yetmiyor.'
+    # ^ Oyuncunun hediyeyi alacak yetkisi yoksa atılacak mesaj. %prefix% ile belirlediğiniz prefixi, %oyuncu% ile oyuncunun adını ve %hediye% ile hediye adını alabilirsiniz.
+    gui: #Hediyenin GUI'de gözükecek eşyasının ayarları.
+        aciklamalar:
+          # GUI üzerinde gözükecek eşyanın açıklama (lore) kısmında yazacaklar. Eğer hediyeyi aldıysa %süre% ile oyuncunun kalan süresini ve %zaman% ile de alabileceği tarihi alabilirsiniz
+          # Bu kısımlarda boş satır bırakmak için satıra '&f' yazın.
+          zaten-almissin: # Eğer oyuncu hediyeyi almışsa gözükecek açıklama.
+          - '&eselam'
+          - '&ealmşsn'
+          - '&ekalan süren %süre%'
+          - '&calabileceğin zaman: %zaman%'
+          normal: # Eğer oyuncu hediyeyi almamışsa gözükecek açıklama.
+          - '&eselam'
+          - '&ealmamışsın'
+          yetkin-yok: # Eğer oyuncunun yetkisi yoksa göreceği açıklama.
+          - '&f'
+          - '&8&m---'
+          - '&cYetkin yok.'
+          - '&8&m---'
+          - '&f'
+        esyalar:  # GUI'de gözükecek eşyalar.
+          alabiliyorken: emerald block
+          # ^ Oyuncu hediyeyi alabiliyorken göreceği eşya.
+          alamiyorken: redstone block
+          # ^ Oyuncu hediyeyi alamıyorken göreceği eşya.
+        slot: 22
+        # ^ GUI'de gözükecek eşyanın slotu.
+        esya-adi: '&6Çeyrek Hediye'
+        # ^ Eşyanın GUI üzerinde gözükecek adı.
+    komutlar: # Hediye alınınca girilecek komutlar. PlaceholderAPI kullanıyorsanız, onun tüm placeholderini kullanabilirsiniz.
+      konsol: # Konsol tarafından kullanılacak komutlar.
+        - 'say selam %server_online%'
+      oyuncu: # Oyuncu tarafından kullanılacak komutlar.
+        - 'say as %player_name%'
+    verilecekler: # Hediyeyi alınca girilecek komutların dışında verilmesini istediğiniz eşyalar.
+      1: # İstediğinizi yazabilirsiniz.
+        esya: diamond pickaxe
+        # ^ Verilecek eşya.
+        miktar: 2
+        # ^ Verilecek eşyanın miktarı.
+        isim: '&6selam'
+        # ^ Verilecek eşyanın ismi
+        aciklamalari: # Eşyanın açıklama (lore) kısmında yazacaklar.
+        - '&6Bu eşya'
+        - '&6Denemek için verildi.'
+        buyuler: # Eşyada olcak enchantlar. İngilizce olarak yazmanız gerekmekte. Büyük/küçük harf fark etmez ancak büyük i (İ) kullanmayın.
+        - 'FIRE ASPECT 1'

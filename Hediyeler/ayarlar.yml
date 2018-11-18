@@ -1,0 +1,21 @@
+ayarlar: # Buradaki her şeyi dilediğiniz gibi değiştirebilirsiniz.
+    prefix: '&2[&3Hediyeler&2]'
+    # ^ Mesajların başında gözükecek olan ön ek.
+    gui-adi: '&9Hediyeler'
+    # ^ /hediyeler komutu girilince açılacak menünün ismi.
+    ek-gui-slotlari: # /hediyeler komutu girilince açılacak menüde hediyelerin ikonları dışında olmasını istediğiniz eşyaları buraya yazabilirsiniz.
+        '1': # Buraya istediğinizi yazın.
+            esya: wool 
+            # ^ Gözükecek eşya.
+            esya-adi: '&6Wool'
+            # ^ Gözükecek eşyanın ad.
+            slot: 0
+            # ^ Eşyanın bulunacağı slot.
+            aciklamalar:
+            - '&6Sadsa'
+            # ^ Eşyanın açıklama (lore) kısmında gözükecek olan yazılar.
+            tiklayinca-kapatma: true
+            # ^ Eğer true ise eşyaya tıkladığında menü kapanır, false ise kapanmaz.
+            komutlar:
+            - broadcast selam %player_name% %server_online%
+            # ^ Eşyaya tıklayınca konsol tarafından girilecek komutlar. PlaceholderAPI'yi destekliyor.

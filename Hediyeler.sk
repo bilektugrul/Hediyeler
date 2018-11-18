@@ -1,0 +1,125 @@
+import:
+	java.io.BufferedReader
+	java.io.InputStreamReader
+	java.net.URL
+	me.clip.placeholderapi.PlaceholderAPI
+on load:	
+	execute console command "hediye reload"
+expression placeholder parsed %$strings% [from %-player%]:
+	return type: string
+	get:
+		loop expressions-1:
+			add PlaceholderAPI.setPlaceholders(expression-2, loop-value) to {_return::*}
+		return {_return::*}
+command /hediyeler [<text>]:
+	aliases: hediye
+	trigger:
+		if yaml "Hediyeler/hediyeler" isn't empty:
+			if yaml "Hediyeler/ayarlar" isn't empty:
+				if arg-1 isn't set:
+					open virtual chest inventory with 5 rows named "%yaml value ""ayarlar.gui-adi"" from ""Hediyeler/ayarlar""%" to player
+					while player's current inventory's name is "%yaml value ""ayarlar.gui-adi"" from ""Hediyeler/ayarlar""%":
+						loop yaml node keys "ayarlar.ek-gui-slotlari" from "Hediyeler/ayarlar":
+							set {_value} to loop-value
+							set {_item} to yaml value "ayarlar.ek-gui-slotlari.%loop-value%.esya" from "Hediyeler/ayarlar"
+							set {_slot} to yaml value "ayarlar.ek-gui-slotlari.%loop-value%.slot" from "Hediyeler/ayarlar"
+							set {_itemName} to yaml value "ayarlar.ek-gui-slotlari.%loop-value%.esya-adi" from "Hediyeler/ayarlar"
+							set {_itemLore::*} to colored join yaml list "ayarlar.ek-gui-slotlari.%loop-value%.aciklamalar" from "Hediyeler/ayarlar"
+							set {_commands::*} to placeholder parsed join yaml list "ayarlar.ek-gui-slotlari.%loop-value%.komutlar" from "Hediyeler/ayarlar" from player
+							make gui slot "%{_slot}%" parsed as integer of player with "%{_item}%" parsed as item with no nbt named colored {_itemName} with lore "%{_itemLore::*}%" to run:
+								if yaml value "ayarlar.ek-gui-slotlari.%{_value}%.tiklayinca-kapatma" from "Hediyeler/ayarlar" is true:
+									close player's inventory
+								loop {_commands::*}:
+									execute console command loop-value-2
+						loop yaml node keys "hediyeler" from "Hediyeler/hediyeler":
+							set {_slot} to yaml value "hediyeler.%loop-value%.gui.slot" from "Hediyeler/hediyeler"
+							set {_itemName} to yaml value "hediyeler.%loop-value%.gui.esya-adi" from "Hediyeler/hediyeler"
+							if {hediyeler::hediye::%loop-value%::alanlar::%player%} is set:
+								set {_item} to yaml value "hediyeler.%loop-value%.gui.esyalar.alamiyorken" from "Hediyeler/hediyeler"
+								set {_lore::*} to colored join yaml list "hediyeler.%loop-value%.gui.aciklamalar.zaten-almissin" from "Hediyeler/hediyeler" with "||"
+								set {_süre} to "%difference between now and {hediyeler::hediye::%loop-value%::alanlar::%player%}%"
+								replace "days" and "day" with "gün" in {_süre}
+								replace "hours" and "hour" with "saat" in {_süre}
+								replace "minutes" and "minute" with "dakika" in {_süre}
+								replace "seconds" and "saniye" with "saniye" in {_süre}
+								replace "and" with "," in {_süre} 
+								replace " , " with ", " in {_süre}	
+								replace "%%süre%%" with roundTimespan("%{_süre}%") in {_lore::*}
+								replace "%%zaman%%" with "%{hediyeler::hediye::%loop-value%::alanlar::%player%}%" in {_lore::*}
+								make gui slot "%{_slot}%" parsed as integer of player with "%{_item}%" parsed as item with no nbt named colored {_itemName} with lore "%{_lore::*}%" to close then run player command "hediyeler %loop-value%"
+							else if player doesn't have permission yaml value "hediyeler.%loop-value%.yetki" from "Hediyeler/hediyeler":
+								set {_item} to yaml value "hediyeler.%loop-value%.gui.esyalar.alamiyorken" from "Hediyeler/hediyeler"
+								set {_lore::*} to colored join yaml list "hediyeler.%loop-value%.gui.aciklamalar.yetkin-yok" from "Hediyeler/hediyeler" with "||"
+								make gui slot "%{_slot}%" parsed as integer of player with "%{_item}%" parsed as item with no nbt named colored {_itemName} with lore "%{_lore::*}%" to close then run player command "hediyeler %loop-value%"
+							else if {hediyeler::hediye::%loop-value%::alanlar::%player%} isn't set:
+								set {_item} to yaml value "hediyeler.%loop-value%.gui.esyalar.alabiliyorken" from "Hediyeler/hediyeler"
+								set {_lore::*} to colored join yaml list "hediyeler.%loop-value%.gui.aciklamalar.normal" from "Hediyeler/hediyeler" with "||"
+								make gui slot "%{_slot}%" parsed as integer of player with "%{_item}%" parsed as item with no nbt named colored {_itemName} with lore "%{_lore::*}%" to close then run player command "hediyeler %loop-value%"
+						wait a second
+				else if arg-1 isn't "reload":
+					if "%yaml node keys ""hediyeler"" from ""Hediyeler/hediyeler""%" contains arg-1:
+						if player has permission yaml value "hediyeler.%arg-1%.yetki" from "Hediyeler/hediyeler":
+							if {hediyeler::hediye::%arg-1%::alanlar::%player%} isn't set:
+								send "%{hediyeler::ayarlar::prefix}% &6Hediyeniz veriliyor..."
+								set {_hediye} to colored yaml value "hediyeler.%arg-1%.hediye-ismi" from "Hediyeler/hediyeler"
+								set {_hediyeVerildiMsg} to colored yaml value "hediyeler.%arg-1%.aldin-mesaji" from "Hediyeler/hediyeler"
+								set {_hediyeSure} to yaml value "hediyeler.%arg-1%.sure" from "Hediyeler/hediyeler"
+								set {_konsolKomutlari::*} to placeholder parsed yaml list "hediyeler.%arg-1%.komutlar.konsol" from "Hediyeler/hediyeler" from player
+								set {_oyuncuKomutlari::*} to placeholder parsed yaml list "hediyeler.%arg-1%.komutlar.oyuncu" from "Hediyeler/hediyeler" from player
+								replace "%%oyuncu%%" with "%player%" in {_hediyeVerildiMsg}
+								replace "%%prefix%%" with "%{hediyeler::ayarlar::prefix}%" in {_hediyeVerildiMsg}
+								replace "%%hediye%%" with {_hediye} in {_hediyeVerildiMsg}
+								loop {_konsolKomutlari::*}:
+									execute console command loop-value
+								loop {_oyuncuKomutlari::*}:
+									execute player command loop-value
+								loop yaml node keys "hediyeler.%arg-1%.verilecekler" from "Hediyeler/hediyeler":
+									set {_item} to yaml value "hediyeler.%arg-1%.verilecekler.%loop-value%.esya" from "Hediyeler/hediyeler" parsed as item
+									set {_itemAmount} to yaml value "hediyeler.%arg-1%.verilecekler.%loop-value%.miktar" from "Hediyeler/hediyeler"
+									set {_itemName} to yaml value "hediyeler.%arg-1%.verilecekler.%loop-value%.isim" from "Hediyeler/hediyeler"
+									loop yaml list "hediyeler.%arg-1%.verilecekler.%loop-value%.buyuler" from "Hediyeler/hediyeler":
+										enchant {_item} with "%loop-value-2%" parsed as enchantment type
+									set {_itemLore::*} to colored join yaml list "hediyeler.%arg-1%.verilecekler.%loop-value	%.aciklamalari" from "Hediyeler/hediyeler" with "||"
+									set {_item} to {_item} named colored {_itemName} with lore "%{_itemLore::*}%" 
+									give {_itemAmount} of {_item} to player
+								set {hediyeler::hediye::%arg-1%::alanlar::%player%} to ("%{_hediyeSure}% minutes" parsed as timespan) later
+								send {_hediyeVerildiMsg}
+							else:
+								send "%{hediyeler::ayarlar::prefix}% &cZaten almışsınız."
+						else:
+							set {_yetkinYokMsg} to yaml value "hediyeler.%arg-1%.yetkin-yok-mesaji" from "Hediyeler/hediyeler"
+							replace "%%oyuncu%%" with "%player%" in {_yetkinYokMsg}
+							replace "%%hediye%%" with colored yaml value "hediyeler.%arg-1%.hediye-ismi" from "Hediyeler/hediyeler" in {_yetkinYokMsg}
+							replace "%%prefix%%" with "%{hediyeler::ayarlar::prefix}%" in {_yetkinYokMsg}
+							send {_yetkinYokMsg}
+					else:
+						send "%{hediyeler::ayarlar::prefix}% &cBöyle bir hediye yok."
+				else if arg-1 is "reload":
+					if executor has permission "hediyeler.reload":
+						set {_currentMS} to current system milliseconds
+						load yaml "plugins/Hediyeler/ayarlar.yml" as "Hediyeler/ayarlar"
+						load yaml "plugins/Hediyeler/hediyeler.yml" as "Hediyeler/hediyeler"
+						if yaml "Hediyeler/ayarlar" is empty:
+							send "&c(Hediyeler) &b""Ayarlar"" dosyanız boş, lütfen doldurun." to console
+						if yaml "Hediyeler/hediyeler" is empty:	
+							send "&c(Hediyeler) &b""Hediyeler"" dosyanız boş, lütfen doldurun." to console
+						set {hediyeler::ayarlar::prefix} to colored yaml value "ayarlar.prefix" from "Hediyeler/ayarlar"
+						loop yaml node keys "hediyeler" from "Hediyeler/hediyeler":
+							set {hediyeler::hediye::%loop-value%} to loop-value
+						send "%{hediyeler::ayarlar::prefix}% &f%difference between current system milliseconds and {_currentMS}% ms &6süre içinde yenilendi." to executor
+					else:
+						send "%{hediyeler::ayarlar::prefix}% &cBunu yapamazsın."
+every 1 minute:
+	loop {hediyeler::hediye::*}:
+		loop {hediyeler::hediye::%loop-value%::alanlar::*}:
+			if {hediyeler::hediye::%loop-value-1%::alanlar::%loop-index-2%} is below 1 minute later:
+				delete {hediyeler::hediye::%loop-value-1%::alanlar::%loop-index-2%}
+				set {_hediyeAd} to colored yaml value "hediyeler.%loop-value-1%.hediye-ismi" from "Hediyeler/hediyeler"
+				send "%{hediyeler::ayarlar::prefix}% &f%{_hediyeAd}% &6adlı hediyenizi artık alabilirsiniz!" to loop-index-2 parsed as player
+function roundTimespan(t: text) :: text:
+    loop {_t} split at " ":
+        loop-value parsed as number is set:
+            add round(loop-value parsed as number) to {_return::*}
+        else:
+            add loop-value to {_return::*}
+    return join {_return::*} with " "
